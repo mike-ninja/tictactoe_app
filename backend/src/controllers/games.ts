@@ -8,6 +8,7 @@ import {
   updateGameById,
 } from "../db/games";
 import { getUserBySessionToken } from "../db/users";
+import { newGameValidation } from "../helpers";
 
 // Getting all games by user
 export const getAllGamesByUser = async (
@@ -50,23 +51,26 @@ export const createNewGame = async (
     const { board } = req.body;
 
     if (!board) {
-      return res.sendStatus(400);
+      return res.status(400).json({ error: "Board is missing." });
     }
 
-    const sessionToken = req.cookies["MBARUTEL-AUTH"];
-    const user = await getUserBySessionToken(sessionToken);
+    try {
+      const validatedGame = newGameValidation(board);
+      const sessionToken = req.cookies["MBARUTEL-AUTH"];
+      const user = await getUserBySessionToken(sessionToken);
 
-    const newGame = await createGame({
-      board: board,
-      status: "onGoing",
-      character: "X",
-      user: user.id,
-    });
+      const newGame = await createGame({
+        ...validatedGame,
+        user: user.id,
+      });
 
-    user.games = user.games.concat(newGame._id);
-    await user.save();
+      user.games = user.games.concat(newGame._id);
+      await user.save();
 
-    return res.status(200).json(newGame);
+      return res.status(200).json(newGame);
+    } catch (error) {
+      return res.status(400).json({ error: error.message });
+    }
   } catch (error) {
     console.log(error);
     return res.sendStatus(500);
