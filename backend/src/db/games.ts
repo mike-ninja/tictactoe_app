@@ -9,6 +9,7 @@ const GameSchema = new mongoose.Schema({
   ],
   status: String,
   character: String,
+  firstMove: Boolean,
   user: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",

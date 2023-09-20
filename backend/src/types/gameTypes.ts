@@ -12,4 +12,5 @@ export type Game = {
   board: Board;
   status: Status;
   character: Character;
+  firstMove: boolean;
 };
