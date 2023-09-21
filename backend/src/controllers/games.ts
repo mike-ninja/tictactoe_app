@@ -9,6 +9,7 @@ import {
 } from "../db/games";
 import { getUserBySessionToken } from "../db/users";
 import { newGameValidation } from "../helpers";
+import { makeMove } from "../helpers/makeMove";
 
 // Getting all games by user
 export const getAllGamesByUser = async (
@@ -56,11 +57,12 @@ export const createNewGame = async (
 
     try {
       const validatedGame = newGameValidation(board);
+      const gameWithMove = makeMove(validatedGame);
       const sessionToken = req.cookies["MBARUTEL-AUTH"];
       const user = await getUserBySessionToken(sessionToken);
 
       const newGame = await createGame({
-        ...validatedGame,
+        ...gameWithMove,
         user: user.id,
       });
 
@@ -113,7 +115,10 @@ export const updateGame = async (
       board: board,
       status: game.status,
       character: game.character,
+      firstMove: game.firstMove,
     };
+
+    // const updatedGameWithMove = makeMove(updatedGame);
 
     const savedUpdatedGame = await updateGameById(id, updatedGame);
 

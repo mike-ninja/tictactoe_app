@@ -3,9 +3,9 @@ import { GameInterface } from "types";
 
 const GameSchema = new mongoose.Schema({
   board: [
-    String,
-    String,
-    String,
+    [String],
+    [String],
+    [String],
   ],
   status: String,
   character: String,

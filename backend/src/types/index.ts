@@ -1,4 +1,13 @@
 import { GameInterface, UserInterface } from "./dbTypes";
-import { Board, Character, Game, Status } from "./gameTypes";
+import { Board, Character, Game, GameResult, Move, Status } from "./gameTypes";
 
-export { Board, Character, Game, GameInterface, Status, UserInterface };
+export {
+  Board,
+  Character,
+  Game,
+  GameInterface,
+  GameResult,
+  Move,
+  Status,
+  UserInterface,
+};
