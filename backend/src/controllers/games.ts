@@ -8,9 +8,8 @@ import {
   updateGameById,
 } from "../db/games";
 import { getUserBySessionToken } from "../db/users";
-import { validateNewGame } from "../helpers";
+import { parseGameObject, validateGame, validateNewGame } from "../helpers";
 import { makeMove } from "../helpers/makeMove";
-import { updateGameValidation } from "../helpers/gameValidation";
 import { Character, Status } from "types";
 
 // Getting all games by user
@@ -37,6 +36,10 @@ export const getGame = async (req: express.Request, res: express.Response) => {
     const { id } = req.params;
 
     const game = await getGameById(id);
+
+    if (!game) {
+      return res.sendStatus(404);
+    }
 
     return res.status(200).json(game);
   } catch (error) {
@@ -92,6 +95,10 @@ export const deleteGame = async (
 
     const deletedGame = await deleteGameById(id);
 
+    if (!deletedGame) {
+      return res.sendStatus(404);
+    }
+
     return res.json(deletedGame);
   } catch (error) {
     console.log(error);
@@ -113,16 +120,10 @@ export const updateGame = async (
     }
 
     const game = await getGameById(id);
-
-    const gameToUpdate = {
-      board: board,
-      status: game.status as Status,
-      character: game.character as Character,
-      firstMove: game.firstMove,
-    };
+    const parsedGame = parseGameObject(game);
 
     try {
-      const validatedGame = updateGameValidation(board, gameToUpdate);
+      const validatedGame = validateGame(board, parsedGame);
 
       console.log("before move");
       const updatedGameWithMove = makeMove(validatedGame);
