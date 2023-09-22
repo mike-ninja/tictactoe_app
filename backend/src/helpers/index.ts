@@ -1,4 +1,5 @@
 import { authentication, random } from "./authentication";
-import { newGameValidation } from "./gameValidation";
+import { validateNewGame } from "./validateNewGame";
+import validateBoardFormat from "./validateBoardFormat";
 
-export { authentication, newGameValidation, random };
+export { authentication, random, validateBoardFormat, validateNewGame };

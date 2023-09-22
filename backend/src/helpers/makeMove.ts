@@ -75,6 +75,9 @@ const randomizerMove = (board: Board): Move => {
   while (board[randomRow][randomCol] !== "-") {
     randomRow = Math.floor(Math.random() * 2);
     randomCol = Math.floor(Math.random() * 2);
+    console.log("Does it get stuck here");
+    console.log(`randomRow ${randomRow}`);
+    console.log(`randomCol ${randomCol}`);
   }
   return { row: randomRow, col: randomCol };
 };

@@ -8,8 +8,10 @@ import {
   updateGameById,
 } from "../db/games";
 import { getUserBySessionToken } from "../db/users";
-import { newGameValidation } from "../helpers";
+import { validateNewGame } from "../helpers";
 import { makeMove } from "../helpers/makeMove";
+import { updateGameValidation } from "../helpers/gameValidation";
+import { Character, Status } from "types";
 
 // Getting all games by user
 export const getAllGamesByUser = async (
@@ -56,8 +58,9 @@ export const createNewGame = async (
     }
 
     try {
-      const validatedGame = newGameValidation(board);
+      const validatedGame = validateNewGame(board);
       const gameWithMove = makeMove(validatedGame);
+
       const sessionToken = req.cookies["MBARUTEL-AUTH"];
       const user = await getUserBySessionToken(sessionToken);
 
@@ -111,18 +114,26 @@ export const updateGame = async (
 
     const game = await getGameById(id);
 
-    const updatedGame = {
+    const gameToUpdate = {
       board: board,
-      status: game.status,
-      character: game.character,
+      status: game.status as Status,
+      character: game.character as Character,
       firstMove: game.firstMove,
     };
 
-    // const updatedGameWithMove = makeMove(updatedGame);
+    try {
+      const validatedGame = updateGameValidation(board, gameToUpdate);
 
-    const savedUpdatedGame = await updateGameById(id, updatedGame);
+      console.log("before move");
+      const updatedGameWithMove = makeMove(validatedGame);
 
-    return res.status(200).json(savedUpdatedGame).end();
+      console.log("Move was made");
+      const savedUpdatedGame = await updateGameById(id, updatedGameWithMove);
+
+      return res.status(200).json(savedUpdatedGame).end();
+    } catch (error) {
+      return res.status(400).json({ error: error.message });
+    }
   } catch (error) {
     console.log(error);
     return res.sendStatus(500);

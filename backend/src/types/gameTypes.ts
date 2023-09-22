@@ -1,8 +1,8 @@
-export type Character = "X" | "O";
+export type Character = "X" | "O" | "-";
 
 export type Status = "onGoing" | "win" | "lose" | "draw";
 
-export type Board = string[][];
+export type Board = Character[][];
 
 export type Move = {
   row: number | undefined;
