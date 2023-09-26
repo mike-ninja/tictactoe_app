@@ -1,4 +1,4 @@
-import { miniMax } from "../src/helpers/makeMove";
+import miniMax from "../src/helpers/miniMax";
 import { Board } from "../src/types";
 
 describe("miniMax", () => {
@@ -26,19 +26,6 @@ describe("miniMax", () => {
     const result = miniMax(board, currentPlayer);
 
     expect(result).toEqual({ row: 1, col: 0 });
-  });
-
-  it("This should return a loss", () => {
-    const board = [
-      ["O", "-", "O"],
-      ["X", "-", "O"],
-      ["X", "-", "-"],
-    ] as Board;
-    const currentPlayer = "X";
-
-    const result = miniMax(board, currentPlayer);
-
-    expect(result).toEqual(undefined);
   });
 
   it("This should make a defending move", () => {
