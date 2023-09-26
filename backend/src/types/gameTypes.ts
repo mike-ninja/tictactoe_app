@@ -10,10 +10,10 @@ export type Move = {
 };
 
 export enum GameResult {
-  Win,
-  Draw,
-  Lose,
-  Ongoing,
+  Win, // 0
+  Ongoing, // 1
+  Draw, // 2
+  Lose, // 3
 }
 
 export type Game = {

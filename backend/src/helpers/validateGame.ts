@@ -1,4 +1,4 @@
-import { Board, Character, Game, GameResult, Status } from "types";
+import { Board, Character, Game } from "types";
 import validateBoardFormat from "./validateBoardFormat";
 
 const validateBoard = (
@@ -6,8 +6,8 @@ const validateBoard = (
   character: Character,
   firstMove: boolean,
 ): Board => {
-  var myMoves = 0;
-  var enemyMoves = 0;
+  var userMoves = 0;
+  var computerMoves = 0;
 
   for (let i = 0; i < board.length; i++) {
     for (let j = 0; j < board[i].length; j++) {
@@ -16,21 +16,17 @@ const validateBoard = (
         throw new Error("Incorrect character in the board.");
       } else if (element === "X" || element === "O") {
         if (element === character) {
-          myMoves += 1;
+          userMoves += 1;
         } else {
-          enemyMoves += 1;
+          computerMoves += 1;
         }
       }
     }
   }
 
-  console.log(`enemy ${enemyMoves}`);
-  console.log(`player ${myMoves}`);
-  console.log(`firstMove ${firstMove}`);
-
-  if (firstMove === false && (enemyMoves - 1) === myMoves) {
+  if (firstMove === true && (userMoves - 1) === computerMoves) {
     return board;
-  } else if (firstMove === true && enemyMoves === myMoves) {
+  } else if (firstMove === false && userMoves === computerMoves) {
     return board;
   }
   throw new Error("Incorrect amount of moves.");

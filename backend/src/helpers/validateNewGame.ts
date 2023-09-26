@@ -15,16 +15,16 @@ const validateNewBoard = (board: Board) => {
       ) {
         throw new Error("Too many moves.");
       } else if (element === "X" || element === "O") {
-        character = element === "X" ? "O" : "X";
+        character = element;
       }
     }
   }
 
   if (character === undefined) {
-    firstMove = true;
-    character = "X";
-  } else {
     firstMove = false;
+    character = "O";
+  } else {
+    firstMove = true;
   }
 
   return { character, firstMove };

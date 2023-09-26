@@ -1,126 +1,65 @@
-// makeMove.test.ts
+import { makeMove } from "../src/helpers/makeMove";
+import { Board, Character, Status } from "../src/types";
 
-import { miniMax } from "../src/helpers/makeMove"; // Import the miniMax function from your makeMove.ts file
-import { Board, GameResult } from "../src/types";
+describe("makeMove", () => {
+  it("computer should return move to defend", () => {
+    const currentGame = {
+      board: [
+        ["O", "X", "-"],
+        ["O", "-", "-"],
+        ["-", "-", "-"],
+      ] as Board,
+      status: "onGoing" as Status,
+      character: "O" as Character,
+      firstMove: true,
+    };
 
-describe("miniMax", () => {
-  it("should return move to defend", () => {
-    const board = [
-      ["X", "O", "X"],
-      ["-", "O", "O"],
-      ["-", "X", "-"],
-    ] as Board;
-    const currentPlayer = "X";
+    const result = makeMove(currentGame);
 
-    const result = miniMax(board, currentPlayer);
-
-    // Access the properties 'move' and 'score' from the result object
-    expect(result.move).toEqual({ row: 1, col: 0 }); // Example assertion
-    expect(result.status).toBe(GameResult.Ongoing); // Example assertion
-  });
-
-  it("should return move to win", () => {
-    const board = [
-      ["X", "O", "X"],
-      ["X", "O", "O"],
-      ["-", "X", "O"],
-    ] as Board;
-    const currentPlayer = "X";
-
-    const result = miniMax(board, currentPlayer);
-
-    // Access the properties 'move' and 'score' from the result object
-    expect(result.move).toEqual({ row: 2, col: 0 }); // Example assertion
-    expect(result.status).toBe(GameResult.Win); // Example assertion
-  });
-
-  it("should return a draw", () => {
-    const board = [
-      ["X", "O", "X"],
-      ["X", "X", "O"],
-      ["O", "X", "O"],
-    ] as Board;
-    const currentPlayer = "X";
-
-    const result = miniMax(board, currentPlayer);
-
-    // Access the properties 'move' and 'score' from the result object
-    expect(result.move).toEqual(undefined); // Example assertion
-    expect(result.status).toBe(GameResult.Draw); // Example assertion
-  });
-
-  it("without randomizer will return to last move", () => {
-    const board = [
-      ["-", "-", "-"],
-      ["-", "-", "-"],
-      ["-", "-", "-"],
-    ] as Board;
-    const currentPlayer = "X";
-
-    const result = miniMax(board, currentPlayer);
-
-    // Access the properties 'move' and 'score' from the result object
-    // expect(result.move).toEqual({ row: 2, col: 2 }); // Example assertion
-    expect(result.status).toBe(GameResult.Ongoing); // Example assertion
-  });
-
-  it("This should return a loss", () => {
-    const board = [
-      ["O", "-", "O"],
-      ["X", "-", "O"],
-      ["X", "-", "-"],
-    ] as Board;
-    const currentPlayer = "X";
-
-    const result = miniMax(board, currentPlayer);
-
-    // Access the properties 'move' and 'score' from the result object
-    expect(result.move).toEqual(undefined); // Example assertion
-    expect(result.status).toBe(GameResult.Lose); // Example assertion
-  });
-
-  it("This should return Ongoing", () => {
-    const board = [
-      ["O", "X", "O"],
-      ["X", "-", "O"],
-      ["X", "-", "-"],
-    ] as Board;
-    const currentPlayer = "X";
-
-    const result = miniMax(board, currentPlayer);
-
-    // Access the properties 'move' and 'score' from the result object
-    // expect(result.move).toEqual(undefined); // Example assertion
-    expect(result.status).toBe(GameResult.Ongoing); // Example assertion
-  });
-
-  it("This should not use randomizer function", () => {
-    const board = [
-      ["O", "X", "X"],
-      ["X", "O", "-"],
+    expect(result.board).toEqual([
       ["O", "X", "-"],
-    ] as Board;
-    const currentPlayer = "X";
-
-    const result = miniMax(board, currentPlayer);
-
-    // Access the properties 'move' and 'score' from the result object
-    expect(result.move).toEqual({ row: 2, col: 2 }); // Example assertion
-    expect(result.status).toBe(GameResult.Ongoing); // Example assertion
+      ["O", "-", "-"],
+      ["X", "-", "-"],
+    ]);
+    expect(result.status).toBe("onGoing");
   });
 
-  it("This should should make a defending move", () => {
-    const board = [
-      ["O", "X", "-"],
+  it("computer should return move to win", () => {
+    const currentGame = {
+      board: [
+        ["X", "-", "-"],
+        ["-", "O", "-"],
+        ["X", "O", "X"],
+      ] as Board,
+      status: "onGoing" as Status,
+      character: "X" as Character,
+      firstMove: true,
+    };
+
+    const result = makeMove(currentGame);
+
+    expect(result.board).toEqual([
       ["X", "O", "-"],
-      ["-", "-", "-"],
-    ] as Board;
-    const currentPlayer = "X";
+      ["-", "O", "-"],
+      ["X", "O", "X"],
+    ]);
+    expect(result.status).toBe("lose");
+  });
 
-    const result = miniMax(board, currentPlayer);
+  it("computer should lose", () => {
+    const currentGame = {
+      board: [
+        ["O", "O", "O"],
+        ["X", "-", "O"],
+        ["X", "-", "X"],
+      ] as Board,
+      status: "onGoing" as Status,
+      character: "O" as Character,
+      firstMove: false,
+    };
 
-    // Access the properties 'move' and 'score' from the result object
-    expect(result.move).toEqual({ row: 2, col: 2 }); // Example assertion
-    expect(result.status).toBe(GameResult.Ongoing); // Example assertion
+    const result = makeMove(currentGame);
+
+    expect(result.status).toBe("win");
   });
 });
